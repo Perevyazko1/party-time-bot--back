@@ -15,7 +15,7 @@ services:
       - ./PartyTimeBotBack/app/static:/usr/src/app/static
 
     ports:
-      - "8001:8001"
+      - "8003:8003"
     restart: always
     networks:
       - network_rs

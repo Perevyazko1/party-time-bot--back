@@ -26,11 +26,11 @@ RUN python manage.py migrate
 
 # Открываем порт 80
 EXPOSE 80
-EXPOSE 8001
+EXPOSE 8003
 
 #nginx &&
 
 # Запускаем Nginx и Gunicorn
-CMD ["sh", "-c", " exec gunicorn app.wsgi:application --bind 0.0.0.0:8001"]
+CMD ["sh", "-c", " exec gunicorn app.wsgi:application --bind 0.0.0.0:8003"]
 
 
