@@ -25,10 +25,14 @@ SECRET_KEY = 'django-insecure-#d$b@2thn6h4-+53%8@^^cx3da^lijh+4gc)xx5_go*)pa7e3i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://188.225.47.208',
+ALLOWED_HOSTS = [
+    'https://188.225.47.208',
+                 '188.225.47.208',
+                 '188.225.47.208:8003',
                  'http://188.225.47.208',
                  'https://www.party-time.tw1.ru',
-                 'https://www.party-time.tw1.ru/admin', ]
+                 'https://www.party-time.tw1.ru/admin',
+]
 CSRF_TRUSTED_ORIGINS = ['http://localhost',
                         'https://localhost',
                         'https://188.225.47.208',
