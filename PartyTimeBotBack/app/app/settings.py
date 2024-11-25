@@ -27,11 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'https://188.225.47.208',
-                 '188.225.47.208',
-                 '188.225.47.208:8003',
-                 'http://188.225.47.208',
-                 'https://www.party-time.tw1.ru',
-                 'https://www.party-time.tw1.ru/admin',
+    '188.225.47.208',
+    '188.225.47.208:8003',
+    'http://188.225.47.208',
+    'party-time.tw1.ru',
+    'http://www.party-time.tw1.ru',
+    'http://party-time.tw1.ru',
+    'https://party-time.tw1.ru',
+    'https://www.party-time.tw1.ru',
 ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost',
                         'https://localhost',
