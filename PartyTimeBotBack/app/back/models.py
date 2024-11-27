@@ -34,10 +34,19 @@ class CustomUser(AbstractUser):
 
         id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
         about_event = models.CharField('О событии', max_length=500)
-        user = models.ManyToManyField(
-            settings.AUTH_USER_MODEL,
-        )
+        user = models.ManyToManyField(CustomUser, related_name='events')
+
         best_dates = models.ManyToManyField(DateEvent)
         worst_dates = models.ManyToManyField(DateEvent)
         type_event = models.CharField(max_length=100)
         img_event = models.ImageField(upload_to='event_images/')
+
+    class Advertising(models.Model):
+        class Meta:
+            verbose_name = 'Реклама'
+            verbose_name_plural = 'Реклама'
+        picture = models.ImageField(upload_to='advertising_pictures/')
+        link_to_site = models.CharField('Ссылка на сайт', max_length=100)
+        header_advertising = models.CharField('Заголовок рекламы', max_length=100)
+        text_advertising = models.CharField('Текст рекламы', max_length=500)
+        count_view = models.IntegerField(default=0)
