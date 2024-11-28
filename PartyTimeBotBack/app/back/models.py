@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
         verbose_name_plural = 'Пользователь'
 
     telegram_name = models.CharField('telegram_name', max_length=100)
-    telegram_id = models.CharField('telegram_id', max_length=100)
+    telegram_id = models.CharField('telegram_id', max_length=100, unique=True)
     phone = models.CharField('номер телефона', max_length=100)
     date_subscribe = models.DateField('дата регистрации', default=timezone.now)
     status_pay = models.CharField('статус оплаты', max_length=100)
