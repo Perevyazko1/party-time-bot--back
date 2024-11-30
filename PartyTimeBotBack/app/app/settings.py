@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-#d$b@2thn6h4-+53%8@^^cx3da^lijh+4gc)xx5_go*)pa7e3i
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     'https://188.225.47.208',
     '188.225.47.208',
     '188.225.47.208:8003',
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'corsheaders',
     'back'
 ]
@@ -138,6 +140,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -13,10 +13,10 @@ RUN pip install --no-cache-dir -r req.txt
 COPY .. .
 
 # Собираем статические файлы
-RUN python manage.py collectstatic --noinput
+
 RUN python manage.py makemigrations
 RUN python manage.py migrate
-
+RUN python manage.py collectstatic --noinput
 
 # Устанавливаем Nginx
 

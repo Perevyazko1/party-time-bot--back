@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from datetime import datetime
+from .models import CustomUser,DateEvent,PartyEvent
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 """
     Создание юзера (telegram_name?,telegram_id, date_subscribe,first_name?,last_name?,birthday?,)

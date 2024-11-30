@@ -9,6 +9,21 @@ class CustomUser(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователь'
 
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customuser_groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_user_permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
     telegram_name = models.CharField('telegram_name', max_length=100)
     telegram_id = models.CharField('telegram_id', max_length=100, unique=True)
     phone = models.CharField('номер телефона', max_length=100)
@@ -20,33 +35,33 @@ class CustomUser(AbstractUser):
     birthday = models.CharField('день рождения', max_length=100)
     about_me = models.CharField('обо мне',max_length=100)
 
-    class DateEvent(models.Model):
-        class Meta:
-            verbose_name = 'Дата события'
-            verbose_name_plural = 'Дата события'
+class DateEvent(models.Model):
+    class Meta:
+        verbose_name = 'Дата события'
+        verbose_name_plural = 'Дата события'
 
-        date_event = models.DateField('дата регистрации', default=timezone.now)
+    date_event = models.DateField('дата регистрации', default=timezone.now)
 
-    class PartyEvent(models.Model):
-        class Meta:
-            verbose_name = 'Разновидность работ'
-            verbose_name_plural = 'Разновидность работ'
+class PartyEvent(models.Model):
+    class Meta:
+        verbose_name = 'Разновидность работ'
+        verbose_name_plural = 'Разновидность работ'
 
-        id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
-        about_event = models.CharField('О событии', max_length=500)
-        user = models.ManyToManyField(CustomUser, related_name='events')
+    id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
+    about_event = models.CharField('О событии', max_length=500)
+    user = models.ManyToManyField('CustomUser', related_name='events')
 
-        best_dates = models.ManyToManyField(DateEvent)
-        worst_dates = models.ManyToManyField(DateEvent)
-        type_event = models.CharField(max_length=100)
-        img_event = models.ImageField(upload_to='event_images/')
+    best_dates = models.ManyToManyField('DateEvent', related_name='best_party_events')
+    worst_dates = models.ManyToManyField('DateEvent', related_name='worst_dates_events')
+    type_event = models.CharField(max_length=100)
+    img_event = models.ImageField(upload_to='event_images/')
 
-    class Advertising(models.Model):
-        class Meta:
-            verbose_name = 'Реклама'
-            verbose_name_plural = 'Реклама'
-        picture = models.ImageField(upload_to='advertising_pictures/')
-        link_to_site = models.CharField('Ссылка на сайт', max_length=100)
-        header_advertising = models.CharField('Заголовок рекламы', max_length=100)
-        text_advertising = models.CharField('Текст рекламы', max_length=500)
-        count_view = models.IntegerField(default=0)
+class Advertising(models.Model):
+    class Meta:
+        verbose_name = 'Реклама'
+        verbose_name_plural = 'Реклама'
+    picture = models.ImageField(upload_to='advertising_pictures/')
+    link_to_site = models.CharField('Ссылка на сайт', max_length=100)
+    header_advertising = models.CharField('Заголовок рекламы', max_length=100)
+    text_advertising = models.CharField('Текст рекламы', max_length=500)
+    count_view = models.IntegerField(default=0)

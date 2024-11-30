@@ -1,6 +1,6 @@
 from django.urls import path
 
-from back.views import create_client, get_slots_reception, get_type_of_work
+from back.views import create_user, create_event, add_date
 
 urlpatterns = [
     path('create_user/', create_user),
