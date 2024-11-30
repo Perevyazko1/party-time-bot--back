@@ -34,6 +34,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField('фамилия', max_length=100)
     birthday = models.CharField('день рождения', max_length=100)
     about_me = models.CharField('обо мне',max_length=100)
+    img_url = models.CharField('img_url' ,max_length=100)
 
 class DateEvent(models.Model):
     class Meta:
