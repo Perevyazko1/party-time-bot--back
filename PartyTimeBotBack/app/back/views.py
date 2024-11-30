@@ -3,6 +3,8 @@ from datetime import datetime
 from .models import CustomUser,DateEvent,PartyEvent
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from .serializers import (PartyEventSerializer)
+
 
 """
     Создание юзера (telegram_name?,telegram_id, date_subscribe,first_name?,last_name?,birthday?,)
@@ -18,6 +20,10 @@ from rest_framework.response import Response
     Загрузка описания (about_event)
 
     Получение рекламных мест(картинка, ссылка на сайт с счетчиком перехода, текст, счетчик просмотров )
+    
+    Получение удобных и не удобных дат юзеров
+    Получение юзера?
+    Получение события
 
 
 
@@ -101,9 +107,12 @@ def create_event(request):
             defaults=defaults
         )
         if created:
-            result = f'Успешно создано новое событие {telegram_id}!'
+            result = {
+                'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
+                'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
+            }
         else:
-            result = f'Успешно обновлено событие {telegram_id}!'
+            result = f'Успешно обновлено событие {created}!'
         return Response(status=status.HTTP_200_OK, data={'result': result})
 
     except CustomUser.DoesNotExist:
@@ -159,3 +168,35 @@ def add_date(request):
     except Exception as e:
         print(e)
         return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': f'Ошибка обновления данных: {e}'})
+
+
+
+@api_view(['GET'])
+def get_event(request):
+    try:
+        # Используем query_params вместо request.data для GET-запроса
+        id_party = request.query_params.get('id_party')
+        if not id_party:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'result': 'id_party is required'},
+            )
+
+        # Получение события
+        queryset = PartyEvent.objects.filter(id_party=id_party)
+        if not queryset.exists():
+            return Response(
+                {"error": f"Событие с id_party {id_party} не найдено."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Сериализация данных
+        serializer_party_event = PartyEventSerializer(queryset, many=True)
+        return Response(serializer_party_event.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {"error": f"Произошла ошибка: {e}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
