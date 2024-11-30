@@ -1,6 +1,4 @@
 from rest_framework import serializers
-
-from organizations.models import Organization
 from back.models import CustomUser, DateEvent, PartyEvent, Advertising
 
 
