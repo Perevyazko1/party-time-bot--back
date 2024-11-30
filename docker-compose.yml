@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./party-time-bot--back/PartyTimeBotBack/app:/usr/src/app
-      - ./party-time-bot--back/PartyTimeBotBack/app/db.sqlite3:/usr/src/app/db.sqlite3
+      - ./PartyTimeBotBack/app/db.sqlite3:/usr/src/app/db.sqlite3
       - ./party-time-bot--back/PartyTimeBotBack/app/static:/usr/src/app/static
 
     ports:
