@@ -24,17 +24,17 @@ class CustomUser(AbstractUser):
         verbose_name='user permissions',
     )
 
-    telegram_name = models.CharField('telegram_name', max_length=100)
+    telegram_name = models.CharField('telegram_name', max_length=100, blank=True)
     telegram_id = models.CharField('telegram_id', max_length=100, unique=True)
-    phone = models.CharField('номер телефона', max_length=100)
+    phone = models.CharField('номер телефона', max_length=100, blank=True)
     date_subscribe = models.DateField('дата регистрации', default=timezone.now)
-    status_pay = models.CharField('статус оплаты', max_length=100)
-    name_organization = models.CharField('название организации', max_length=100)
-    first_name = models.CharField('имя', max_length=100)
-    last_name = models.CharField('фамилия', max_length=100)
-    birthday = models.CharField('день рождения', max_length=100)
-    about_me = models.CharField('обо мне',max_length=100)
-    img_url = models.CharField('img_url' ,max_length=100)
+    status_pay = models.CharField('статус оплаты', max_length=100, blank=True)
+    name_organization = models.CharField('название организации', max_length=100, blank=True)
+    first_name = models.CharField('имя', max_length=100, blank=True)
+    last_name = models.CharField('фамилия', max_length=100, blank=True)
+    birthday = models.CharField('день рождения', max_length=100, blank=True)
+    about_me = models.CharField('обо мне',max_length=100, blank=True)
+    img_url = models.CharField('img_url' ,max_length=100, blank=True)
 
 class DateEvent(models.Model):
     class Meta:
