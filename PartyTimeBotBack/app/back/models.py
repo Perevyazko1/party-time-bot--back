@@ -45,8 +45,8 @@ class DateEvent(models.Model):
 
 class PartyEvent(models.Model):
     class Meta:
-        verbose_name = 'Разновидность работ'
-        verbose_name_plural = 'Разновидность работ'
+        verbose_name = 'Событие'
+        verbose_name_plural = 'Событие'
 
     id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
     about_event = models.CharField('О событии', max_length=500)
