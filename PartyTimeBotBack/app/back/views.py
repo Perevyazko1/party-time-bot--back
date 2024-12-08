@@ -130,36 +130,58 @@ def create_event(request):
         type_event = request.data.get('type_event')
         img_event = request.FILES.get('img_event')
 
-
-
-        defaults = {}
-        if about_event is not None:
-            defaults['about_event'] = about_event
-        if type_event is not None:
-            defaults['type_event'] = type_event
-        if img_event:
-            defaults['img_event'] = img_event
-
-
-
-        event, created = PartyEvent.objects.create(
-            defaults=defaults
+        # Создаем событие
+        event = PartyEvent.objects.create(
+            about_event=about_event if about_event is not None else "",
+            type_event=type_event if type_event is not None else "",
+            img_event=img_event if img_event else None
         )
-        if created:
-            result = {
-                'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
-                'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
-            }
-        else:
-            result = f'Успешно обновлено событие {created}!'
+        created = True  # При вызове create объект всегда создается
+
+        # Формируем ответ
+        result = {
+            'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
+            'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
+        }
+
         return Response(status=status.HTTP_200_OK, data={'result': result})
-
-
 
     except Exception as e:
         print(e)
-        return Response(status=status.HTTP_400_BAD_REQUEST,
-                        data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'})
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
+        )
+@api_view(['POST'])
+def create_event(request):
+    try:
+        about_event = request.data.get('about_event')
+        type_event = request.data.get('type_event')
+        img_event = request.FILES.get('img_event')
+
+        # Создаем событие
+        event = PartyEvent.objects.create(
+            about_event=about_event if about_event is not None else "",
+            type_event=type_event if type_event is not None else "",
+            img_event=img_event if img_event else None
+        )
+        created = True  # При вызове create объект всегда создается
+
+        # Формируем ответ
+        result = {
+            'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
+            'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
+        }
+
+        return Response(status=status.HTTP_200_OK, data={'result': result})
+
+    except Exception as e:
+        print(e)
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
+        )
+
 
 
 @api_view(['POST'])
