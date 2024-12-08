@@ -76,8 +76,8 @@ def create_user(request):
                         data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'})
 
 
-@api_view(['POST'])
-def create_event(request):
+@api_view(['PATCH'])
+def update_event(request):
     try:
         user_id = request.data.get('telegram_id')
         id_party = request.data['id_party']
@@ -118,6 +118,43 @@ def create_event(request):
 
     except CustomUser.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND, data={'result': 'User not found'})
+
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST,
+                        data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'})
+@api_view(['POST'])
+def create_event(request):
+    try:
+        about_event = request.data.get('about_event')
+        type_event = request.data.get('type_event')
+        img_event = request.FILES.get('img_event')
+
+
+
+        defaults = {}
+        if about_event is not None:
+            defaults['about_event'] = about_event
+        if type_event is not None:
+            defaults['type_event'] = type_event
+        if img_event:
+            defaults['img_event'] = img_event
+
+
+
+        event, created = PartyEvent.objects.create(
+            defaults=defaults
+        )
+        if created:
+            result = {
+                'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
+                'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
+            }
+        else:
+            result = f'Успешно обновлено событие {created}!'
+        return Response(status=status.HTTP_200_OK, data={'result': result})
+
+
 
     except Exception as e:
         print(e)
