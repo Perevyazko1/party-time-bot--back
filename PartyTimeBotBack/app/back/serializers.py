@@ -10,19 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 
-class PartyEventSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(many=True, read_only=True)
 
-    class Meta:
-        model = PartyEvent
-        fields = [
-                'id_party',
-                'about_event',
-                'user',
-                'best_dates',
-                'worst_dates',
-                'type_event'
-                  ]
 
 class AdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +31,11 @@ class UserCabinetSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCabinet
         fields = ['id', 'user', 'event', 'dates']  # Добавляем поле 'dates' для связи
+
+
+class PartyEventSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PartyEvent
+        fields = ['id_party', 'about_event', 'user', 'type_event']
