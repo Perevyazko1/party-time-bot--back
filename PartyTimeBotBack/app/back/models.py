@@ -58,15 +58,20 @@ class UserCabinet(models.Model):
     event = models.ForeignKey(PartyEvent, on_delete=models.CASCADE, related_name='users')
 
     class Meta:
+        verbose_name = 'Кабинет пользователя'
+        verbose_name_plural = 'Кабинет пользователя'
         constraints = [
             UniqueConstraint(fields=['user', 'event'], name='unique_user_cabinet')
         ] # Уникальная пара (user, cabinet)
 
     def __str__(self):
-        return f"{self.user} - {self.cabinet}"
+        return f"{self.user} - {self.event}"
 
 
 class UserDate(models.Model):
+    class Meta:
+        verbose_name = 'Даты пользователя'
+        verbose_name_plural = 'Даты пользователя'
     user_cabinet = models.ForeignKey(UserCabinet, on_delete=models.CASCADE, related_name='dates')
     best_dates = ArrayField(
         models.DateField(),
@@ -81,7 +86,7 @@ class UserDate(models.Model):
 
 
     def __str__(self):
-        return f"{self.user_cabinet} - {self.date}"
+        return f"{self.user_cabinet} - {self.best_dates}- {self.worst_dates}"
 
 
 class Notes(models.Model):
