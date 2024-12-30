@@ -46,11 +46,11 @@ class PartyEvent(models.Model):
 
     id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
     about_event = models.CharField('О событии', max_length=500)
-    user = models.ManyToManyField('CustomUser', related_name='events')
+    user = models.ManyToManyField('CustomUser', blank=True, null=True ,related_name='events')
 
 
     type_event = models.CharField(max_length=100)
-    img_event = models.ImageField(upload_to='event_images/')
+    img_event = models.ImageField(upload_to='event_images/', blank=True, null=True)
 
 
 class UserCabinet(models.Model):
