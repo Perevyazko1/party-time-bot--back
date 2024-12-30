@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from datetime import datetime
-from .models import CustomUser,DateEvent,PartyEvent
+from .models import CustomUser,PartyEvent, UserCabinet
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -184,50 +183,50 @@ def create_event(request):
 
 
 
-@api_view(['POST'])
-def add_date(request):
-    try:
-        best_dates_str = request.data.getlist('best_dates')
-        worst_dates_str = request.data.getlist('worst_dates') # getlist для получения списка дат
-        event_id = request.data.get('event_id')
-
-        if not event_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'event_id is required'})
-
-        event = PartyEvent.objects.get(id_party=uuid.UUID(event_id)) #Преобразование event_id в UUID
-
-        if best_dates_str:
-            best_dates_objects = []
-            for date_str in best_dates_str:
-                try:
-                    date_obj = DateEvent.objects.get_or_create(date_event=datetime.strptime(date_str, '%Y-%m-%d').date())[0]
-                    best_dates_objects.append(date_obj)
-                except ValueError:
-                    return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'Invalid best_dates format. Use YYYY-MM-DD'})
-            event.best_dates.add(*best_dates_objects)
-
-
-        if worst_dates_str:
-            worst_dates_objects = []
-            for date_str in worst_dates_str:
-                try:
-                    date_obj = DateEvent.objects.get_or_create(date_event=datetime.strptime(date_str, '%Y-%m-%d').date())[0]
-                    worst_dates_objects.append(date_obj)
-                except ValueError:
-                    return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'Invalid worst_dates format. Use YYYY-MM-DD'})
-            event.worst_dates.add(*worst_dates_objects)
-
-
-        result = f'Успешно обновлено событие {event_id}!'
-        return Response(status=status.HTTP_200_OK, data={'result': result})
-
-    except PartyEvent.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND, data={'result': 'PartyEvent not found'})
-    except ValueError as e:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': f'Ошибка валидации данных: {e}'})
-    except Exception as e:
-        print(e)
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': f'Ошибка обновления данных: {e}'})
+# @api_view(['POST'])
+# def add_date(request):
+#     try:
+#         best_dates_str = request.data.getlist('best_dates')
+#         worst_dates_str = request.data.getlist('worst_dates') # getlist для получения списка дат
+#         event_id = request.data.get('event_id')
+#
+#         if not event_id:
+#             return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'event_id is required'})
+#
+#         event = PartyEvent.objects.get(id_party=uuid.UUID(event_id)) #Преобразование event_id в UUID
+#
+#         if best_dates_str:
+#             best_dates_objects = []
+#             for date_str in best_dates_str:
+#                 try:
+#                     date_obj = DateEvent.objects.get_or_create(date_event=datetime.strptime(date_str, '%Y-%m-%d').date())[0]
+#                     best_dates_objects.append(date_obj)
+#                 except ValueError:
+#                     return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'Invalid best_dates format. Use YYYY-MM-DD'})
+#             event.best_dates.add(*best_dates_objects)
+#
+#
+#         if worst_dates_str:
+#             worst_dates_objects = []
+#             for date_str in worst_dates_str:
+#                 try:
+#                     date_obj = DateEvent.objects.get_or_create(date_event=datetime.strptime(date_str, '%Y-%m-%d').date())[0]
+#                     worst_dates_objects.append(date_obj)
+#                 except ValueError:
+#                     return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': 'Invalid worst_dates format. Use YYYY-MM-DD'})
+#             event.worst_dates.add(*worst_dates_objects)
+#
+#
+#         result = f'Успешно обновлено событие {event_id}!'
+#         return Response(status=status.HTTP_200_OK, data={'result': result})
+#
+#     except PartyEvent.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND, data={'result': 'PartyEvent not found'})
+#     except ValueError as e:
+#         return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': f'Ошибка валидации данных: {e}'})
+#     except Exception as e:
+#         print(e)
+#         return Response(status=status.HTTP_400_BAD_REQUEST, data={'result': f'Ошибка обновления данных: {e}'})
 
 
 
@@ -260,3 +259,8 @@ def get_event(request):
             {"error": f"Произошла ошибка: {e}"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    
+def get_queryset(self):
+    user = self.request.user
+    event = self.request.event
+    return UserCabinet.objects.filter(user=user, event=event)

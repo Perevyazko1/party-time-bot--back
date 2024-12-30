@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
 import uuid
 
 
@@ -36,12 +38,6 @@ class CustomUser(AbstractUser):
     about_me = models.CharField('обо мне',max_length=100, blank=True)
     img_url = models.CharField('img_url' ,max_length=100, blank=True)
 
-class DateEvent(models.Model):
-    class Meta:
-        verbose_name = 'Дата события'
-        verbose_name_plural = 'Дата события'
-
-    date_event = models.DateField('дата регистрации', default=timezone.now)
 
 class PartyEvent(models.Model):
     class Meta:
@@ -52,10 +48,51 @@ class PartyEvent(models.Model):
     about_event = models.CharField('О событии', max_length=500)
     user = models.ManyToManyField('CustomUser', related_name='events')
 
-    best_dates = models.ManyToManyField('DateEvent', related_name='best_party_events')
-    worst_dates = models.ManyToManyField('DateEvent', related_name='worst_dates_events')
+
     type_event = models.CharField(max_length=100)
     img_event = models.ImageField(upload_to='event_images/')
+
+
+class UserCabinet(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='event')
+    event = models.ForeignKey(PartyEvent, on_delete=models.CASCADE, related_name='users')
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user', 'event'], name='unique_user_cabinet')
+        ] # Уникальная пара (user, cabinet)
+
+    def __str__(self):
+        return f"{self.user} - {self.cabinet}"
+
+
+class UserDate(models.Model):
+    user_cabinet = models.ForeignKey(UserCabinet, on_delete=models.CASCADE, related_name='dates')
+    best_dates = ArrayField(
+        models.DateField(),
+        blank=True,
+        default=list
+    )
+    worst_dates = ArrayField(
+        models.DateField(),
+        blank=True,
+        default=list
+    )
+
+
+    def __str__(self):
+        return f"{self.user_cabinet} - {self.date}"
+
+
+class Notes(models.Model):
+    user_cabinet = models.ForeignKey(UserCabinet, on_delete=models.CASCADE, related_name='notes')
+    note_user = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return f"{self.user_cabinet} - {self.date}"
+
+
 
 class Advertising(models.Model):
     class Meta:

@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-#d$b@2thn6h4-+53%8@^^cx3da^lijh+4gc)xx5_go*)pa7e3i
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '0.0.0.0',
     'localhost',
     'https://188.225.47.208',
     '188.225.47.208',
@@ -101,8 +102,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',   # Используется PostgreSQL
+        'NAME': 'postgres', # Имя базы данных
+        'USER': 'postgres', # Имя пользователя
+        'PASSWORD': 'postgres', # Пароль пользователя
+        'HOST': 'pgdb', # Наименование контейнера для базы данных в Docker Compose
+        'PORT': '5432',  # Порт базы данных
     }
 }
 

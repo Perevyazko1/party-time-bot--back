@@ -2,6 +2,26 @@ version: "3.8"
 
 services:
 
+  pgdb:
+    # Использование готового образа postgres
+    image: postgres
+    # Задание переменных окружения для контейнера с postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      # Задание имени контейнера для сервиса pgdb
+    container_name: pgdb
+    # Связывание тома с директорией в контейнере для сохранения данных postgres
+    volumes:
+      - pgdbdata:/var/lib/postgresql/data/
+    networks:
+      - network_party
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      retries: 5
+      timeout: 5s
 
   django-back:
     environment:
@@ -18,11 +38,13 @@ services:
       - "8003:8003"
     restart: always
     networks:
-      - network_rs
+      - network_party
 
-networks:
-  network_rs:
-    driver: bridge
+
 
 volumes:
-  static_volume:
+  pgdbdata: null
+
+networks:
+  network_party:
+    driver: bridge
