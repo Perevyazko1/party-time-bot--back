@@ -5,7 +5,17 @@ from back.models import CustomUser, UserCabinet, PartyEvent, Advertising, UserDa
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['id',
+                  'last_login',
+                  'username',
+                  'telegram_name',
+                  'telegram_id',
+                  'phone',
+                  'first_name',
+                  'last_name',
+                  'birthday',
+                  'img_url',
+                  ]
 
 
 
