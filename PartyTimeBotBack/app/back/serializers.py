@@ -27,7 +27,7 @@ class UserDateSerializer(serializers.ModelSerializer):
 
 class UserCabinetSerializer(serializers.ModelSerializer):
     dates = UserDateSerializer(many=True, read_only=True)  # Связь с UserDate через related_name
-    user = CustomUserSerializer(many=True, read_only=True)
+    user = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = UserCabinet
