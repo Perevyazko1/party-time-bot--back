@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import (PartyEventSerializer)
+from django.db import IntegrityError
 
 
 """
@@ -152,34 +153,59 @@ def create_event(request):
             data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
         )
 @api_view(['POST'])
-def create_event(request):
+def create_cabinet_user(request):
     try:
-        about_event = request.data.get('about_event')
-        type_event = request.data.get('type_event')
-        img_event = request.FILES.get('img_event')
+        # Получаем данные из запроса
+        telegram_id = request.data.get('telegram_id')
+        event_id = request.data.get('event_id')
 
-        # Создаем событие
-        event = PartyEvent.objects.create(
-            about_event=about_event if about_event is not None else "",
-            type_event=type_event if type_event is not None else "",
-            img_event=img_event if img_event else None
+        if not telegram_id or not event_id:
+            return Response({'error': 'telegram_id and event_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Проверяем, существует ли пользователь с таким telegram_id
+        user, created = CustomUser.objects.get_or_create(
+            telegram_id=telegram_id,
+            defaults={
+                'username': f'telegram_{telegram_id}',  # Задаем уникальное имя пользователя
+                'telegram_name': request.data.get('telegram_name', ''),
+                'first_name': request.data.get('first_name', ''),
+                'last_name': request.data.get('last_name', ''),
+                'img_url': request.data.get('img_url', ''),
+
+            }
         )
-        created = True  # При вызове create объект всегда создается
 
-        # Формируем ответ
-        result = {
-            'result': f"Успешно {'создано' if created else 'обновлено'} событие!",
-            'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
-        }
+        if created:
+            print(f"Создан новый пользователь с telegram_id: {telegram_id}")
 
-        return Response(status=status.HTTP_200_OK, data={'result': result})
+        # Проверяем, существует ли событие
+        try:
+            event = PartyEvent.objects.get(id_party=event_id)
+        except PartyEvent.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Создаем экземпляр UserCabinet
+        user_cabinet, created_cabinet = UserCabinet.objects.get_or_create(
+            user=user,
+            event=event
+        )
+
+        if created_cabinet:
+            print(f"Создан кабинет пользователя для user: {user} и event: {event}")
+
+        return Response({
+            'message': 'UserCabinet created successfully',
+            'user_id': user.id,
+            'event_id': event.id_party,
+            'cabinet_id': user_cabinet.id
+
+        }, status=status.HTTP_201_CREATED)
+
+    except IntegrityError as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print(e)
-        return Response(
-            status=status.HTTP_400_BAD_REQUEST,
-            data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
-        )
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
