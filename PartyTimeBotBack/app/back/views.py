@@ -144,7 +144,7 @@ def create_event(request):
             'id_party': str(event.id_party),  # Возвращаем UUID в виде строки
         }
 
-        return Response(status=status.HTTP_200_OK, data={result})
+        return Response(result, status=status.HTTP_200_OK)
 
     except Exception as e:
         print(e)
