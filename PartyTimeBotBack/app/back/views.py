@@ -1,4 +1,6 @@
 from datetime import datetime
+from numbers import Number
+
 from .models import CustomUser,PartyEvent, UserCabinet, UserDate
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -217,7 +219,7 @@ def add_date(request):
         user_cabinet_id = request.data.get('user_cabinet_id')
 
         try:
-            user_cabinet = UserCabinet.objects.get(id=user_cabinet_id)
+            user_cabinet = UserCabinet.objects.get(id=int(user_cabinet_id))
         except UserCabinet.DoesNotExist:
             return Response(
                 {'error': 'UserCabinet не найден'},
