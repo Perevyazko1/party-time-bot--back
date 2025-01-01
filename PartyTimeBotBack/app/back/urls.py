@@ -1,12 +1,13 @@
 from django.urls import path
 
-from back.views import create_user, create_event, get_event,create_cabinet_user
+from back.views import create_user, create_event, get_event,create_cabinet_user, add_date
 
 urlpatterns = [
     path('create_user/', create_user),
     path('create_event/', create_event),
     path('get_event/', get_event),
     path('create_cabinet_user/', create_cabinet_user),
+    path('add_date/', add_date),
 ]
 
 
