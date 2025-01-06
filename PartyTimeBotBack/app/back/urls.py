@@ -9,7 +9,7 @@ urlpatterns = [
     path('create_cabinet_user/', create_cabinet_user),
     path('add_date/', add_date),
     path('get_advertising/', get_advertising),
-    path('get_advertising_item/<int:pk>/', get_advertising_item),
+    path('get_advertising_item/', get_advertising_item),
 ]
 
 
