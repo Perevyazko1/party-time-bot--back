@@ -285,21 +285,21 @@ def get_event(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 @api_view(['GET'])
-def get_advertising_item(request):
+def get_advertising_item(request, id):
     try:
         # Используем query_params вместо request.data для GET-запроса
-        advertising_id = request.query_params.get('advertising_id')
-        if not advertising_id:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={'result': 'advertising is required'},
-            )
+        # advertising_id = request.query_params.get('advertising_id')
+        # if not advertising_id:
+        #     return Response(
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #         data={'result': 'advertising is required'},
+        #     )
 
         # Получение события
-        queryset = Advertising.objects.get(id=int(advertising_id))
+        queryset = Advertising.objects.get(id=id)
         if not queryset.exists():
             return Response(
-                {"error": f"Событие с id_party {advertising_id} не найдено."},
+                {"error": f"Реклама с id {id} не найдено."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
