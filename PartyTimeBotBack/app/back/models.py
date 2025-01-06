@@ -109,10 +109,12 @@ class Advertising(models.Model):
     text_advertising = models.CharField('Текст рекламы', max_length=500)
     price = models.IntegerField('Стоимость',default=0)
     count_view = models.IntegerField('Кол-во просмотров',default=0)
-    dates = ArrayField('Даты посещения',
-        models.DateField(),
+    dates = ArrayField(
+        base_field=models.DateField(),  # Указываем base_field как поле DateField.
+        verbose_name='Даты посещения',  # verbose_name добавляем отдельно.
         blank=True,
-        default=list)
+        default=list
+    )
     place = models.CharField('Место или адрес',max_length=500)
     discount = models.IntegerField('Скидка',default=0)
 
