@@ -103,8 +103,28 @@ class Advertising(models.Model):
     class Meta:
         verbose_name = 'Реклама'
         verbose_name_plural = 'Реклама'
-    picture = models.ImageField(upload_to='advertising_pictures/')
-    link_to_site = models.CharField('Ссылка на сайт', max_length=100)
+    link_to_site = models.CharField('Ссылка на сайт', max_length=100, blank=True)
+    link_to_pay = models.CharField('Ссылка на оплату', max_length=500, blank=True)
     header_advertising = models.CharField('Заголовок рекламы', max_length=100)
     text_advertising = models.CharField('Текст рекламы', max_length=500)
-    count_view = models.IntegerField(default=0)
+    price = models.IntegerField('Стоимость',default=0)
+    count_view = models.IntegerField('Кол-во просмотров',default=0)
+    dates = ArrayField('Даты посещения',
+        models.DateField(),
+        blank=True,
+        default=list)
+    place = models.CharField('Место или адрес',max_length=500)
+    discount = models.IntegerField('Скидка',default=0)
+
+class AdvertisingPicture(models.Model):
+    advertising = models.ForeignKey(
+        Advertising,
+        related_name='pictures',
+        on_delete=models.CASCADE,
+        verbose_name='Реклама'
+    )
+    picture = models.ImageField(upload_to='advertising_pictures/')
+
+    class Meta:
+        verbose_name = 'Изображение для рекламы'
+        verbose_name_plural = 'Изображения для рекламы'
