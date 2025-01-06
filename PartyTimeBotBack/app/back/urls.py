@@ -1,6 +1,6 @@
 from django.urls import path
 
-from back.views import create_user, create_event, get_event,create_cabinet_user, add_date
+from back.views import create_user, create_event, get_event,create_cabinet_user, add_date, get_advertising, get_advertising_item
 
 urlpatterns = [
     path('create_user/', create_user),
@@ -8,6 +8,8 @@ urlpatterns = [
     path('get_event/', get_event),
     path('create_cabinet_user/', create_cabinet_user),
     path('add_date/', add_date),
+    path('get_advertising/', get_advertising),
+    path('get_advertising_item/<int:pk>/', get_advertising_item),
 ]
 
 

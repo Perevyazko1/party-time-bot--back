@@ -1,11 +1,11 @@
 from datetime import datetime
 from numbers import Number
 
-from .models import CustomUser,PartyEvent, UserCabinet, UserDate
+from .models import CustomUser,PartyEvent, UserCabinet, UserDate, Advertising
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import (PartyEventSerializer)
+from .serializers import PartyEventSerializer, AdvertisingSerializer
 from django.db import IntegrityError
 
 
@@ -284,7 +284,61 @@ def get_event(request):
             {"error": f"Произошла ошибка: {e}"},
             status=status.HTTP_400_BAD_REQUEST,
         )
-    
+@api_view(['GET'])
+def get_advertising_item(request):
+    try:
+        # Используем query_params вместо request.data для GET-запроса
+        advertising_id = request.query_params.get('advertising_id')
+        if not advertising_id:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'result': 'advertising is required'},
+            )
+
+        # Получение события
+        queryset = Advertising.objects.get(id=advertising_id)
+        if not queryset.exists():
+            return Response(
+                {"error": f"Событие с id_party {advertising_id} не найдено."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Сериализация данных
+        serializer_party_event = AdvertisingSerializer(queryset, many=True)
+        return Response(serializer_party_event.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {"error": f"Произошла ошибка: {e}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+
+
+@api_view(['GET'])
+def get_advertising(request):
+    try:
+        # Получение Рекламы
+        queryset = Advertising.objects.all()
+        if not queryset.exists():
+            return Response(
+                {"error": "Рекламы не найдены."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Сериализация данных
+        serializer_party_event = AdvertisingSerializer(queryset, many=True)
+        return Response(serializer_party_event.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {"error": f"Произошла ошибка: {e}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
 # def get_queryset(self):
 #     user = self.request.user
 #     event = self.request.event

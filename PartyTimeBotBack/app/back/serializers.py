@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from back.models import CustomUser, UserCabinet, PartyEvent, Advertising, UserDate
+from back.models import CustomUser, UserCabinet, PartyEvent, Advertising, UserDate, AdvertisingPicture
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -22,7 +22,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 
+class AdvertisingPictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvertisingPicture
+        fields = '__all__'
+
+
 class AdvertisingSerializer(serializers.ModelSerializer):
+    pictures = AdvertisingPictureSerializer(many=True, read_only=True)  # Указываем вложенный сериализатор
+
     class Meta:
         model = Advertising
         fields = '__all__'
