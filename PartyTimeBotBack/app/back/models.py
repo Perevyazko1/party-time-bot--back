@@ -115,7 +115,7 @@ class Advertising(models.Model):
         blank=True,
         default=list
     )
-    place = models.CharField('Место или адрес',max_length=500)
+    place = models.CharField('Место или адрес',max_length=500, null=True)
     discount = models.IntegerField('Скидка',default=0)
 
 class AdvertisingPicture(models.Model):
