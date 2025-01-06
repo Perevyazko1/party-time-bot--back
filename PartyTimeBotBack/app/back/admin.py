@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django import forms
-from .models import CustomUser,PartyEvent, Advertising, UserCabinet, UserDate
+from .models import CustomUser,PartyEvent, Advertising, UserCabinet, UserDate, AdvertisingPicture
 
 admin.site.register(CustomUser)
 admin.site.register(PartyEvent)
 admin.site.register(Advertising)
 admin.site.register(UserCabinet)
 admin.site.register(UserDate)
+admin.site.register(AdvertisingPicture)
 
 class UserDateAdminForm(forms.ModelForm):
     class Meta:
