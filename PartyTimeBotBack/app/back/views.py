@@ -296,7 +296,7 @@ def get_advertising_item(request, id):
         #     )
 
         # Получение события
-        queryset = Advertising.objects.get(id=id)
+        queryset = Advertising.objects.get(pk=id)
         if not queryset.exists():
             return Response(
                 {"error": f"Реклама с id {id} не найдено."},
