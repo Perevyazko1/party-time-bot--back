@@ -40,6 +40,18 @@ services:
     networks:
       - network_party
 
+  bot-party:
+    environment:
+      - TZ=Europe/Moscow
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    networks:
+      - network_party
+    depends_on:
+      - django-back
+    restart: always
+
 
 
 volumes:
