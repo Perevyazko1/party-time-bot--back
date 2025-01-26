@@ -23,7 +23,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 async def start(message: types.Message):
     markup = types.InlineKeyboardMarkup()
     start_data = message.get_args()
-    markup.add(types.InlineKeyboardButton("open",web_app=WebAppInfo(url=f"https://perevyazko1.github.io/party-time-bot-front-new/#/event/{start_data}")))
+    markup.add(types.InlineKeyboardButton("open",web_app=WebAppInfo(url=f"https://perevyazko1.github.io/party-time-bot-front-new/#event/{start_data}")))
     "https://api.telegram.org/file/bot7524073074:AAEOaVQ86O5knm_67Oy3MY-49l2O_fLPVGE/photos/file_0.jpg"
     start_data = message.get_args()  # Получаем данные из параметра start
     if start_data:
@@ -34,7 +34,7 @@ async def start(message: types.Message):
 async def create_event(message: types.Message):
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("открыть страницу записи",
-                                    web_app=WebAppInfo(url=f"https://perevyazko1.github.io/party-time-bot-front-new/#/create_event")))
+                                    web_app=WebAppInfo(url=f"https://perevyazko1.github.io/party-time-bot-front-new/#create_event")))
     await message.answer(f'запись 👇', reply_markup=markup)
 
 
