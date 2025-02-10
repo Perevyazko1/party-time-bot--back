@@ -127,16 +127,29 @@ def update_event(request):
                         data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'})
 @api_view(['POST'])
 def create_event(request):
+    id_tg_create_user = request.data.get('id_tg_create_user')
     try:
+        if PartyEvent.objects.filter(id_tg_create_user=id_tg_create_user).count() >= 3:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'result': 'Ошибка: пользователь может создать не более 3 событий.'}
+            )
+
         about_event = request.data.get('about_event')
         type_event = request.data.get('type_event')
-        img_event = request.FILES.get('img_event')
+        img_event = request.data.get('img_event')
+        address = request.data.get('address')
+
+
+
 
         # Создаем событие
         event = PartyEvent.objects.create(
             about_event=about_event if about_event is not None else "",
             type_event=type_event if type_event is not None else "",
-            img_event=img_event if img_event else None
+            img_event=img_event if img_event  is not None else "",
+            address=address if address  is not None else "",
+            id_tg_create_user=id_tg_create_user if id_tg_create_user  is not None else 0,
         )
         created = True  # При вызове create объект всегда создается
 
@@ -154,6 +167,97 @@ def create_event(request):
             status=status.HTTP_400_BAD_REQUEST,
             data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
         )
+
+
+@api_view(['DELETE'])
+def delete_event(request):
+    try:
+        id_party = request.data.get('id_party')
+
+        if not id_party :
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'result': 'Ошибка: Не переданы id_party '}
+            )
+
+        # Ищем событие
+        event = PartyEvent.objects.filter(id_party=id_party).first()
+
+        if not event:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'result': 'Ошибка: Событие не найдено или у вас нет прав на его удаление'}
+            )
+
+        # Удаляем событие
+        event.delete()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={'result': 'Событие успешно удалено'}
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'result': f'Ошибка при удалении события: {e}'}
+        )
+
+
+@api_view(['PATCH'])
+def patch_advertising(request):
+    try:
+        advertising_id = request.data.get('advertising_id')  # ID рекламы
+        advertising_likes = request.data.get('advertising_likes')
+        advertising_count_view = request.data.get('advertising_count_view')
+        advertising_count_visit_to_link = request.data.get('advertising_count_visit_to_link')
+
+        if not advertising_id:
+            return Response(
+                {'result': 'Ошибка: Реклама не найдена'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        advertising=Advertising.objects.filter(pk=advertising_id)
+        if not advertising:
+            return Response(
+                {'result': 'Ошибка: Реклама не найдена'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Создаем словарь только с переданными значениями (исключаем None)
+        update_data = {
+            "likes": advertising_likes,
+            "count_view": advertising_count_view,
+            "count_visit_to_link": advertising_count_visit_to_link
+        }
+        filtered_data = {key: value for key, value in update_data.items() if value is not None}
+
+        # Обновляем только переданные поля
+        if filtered_data:
+            for field, value in filtered_data.items():
+                setattr(advertising, field, value)
+            advertising.save()
+
+            return Response(
+                {'result': 'Реклама успешно обновлена', 'updated_fields': filtered_data},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {'result': 'Ошибка: Нет данных для обновления'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    except Exception as e:
+        print(e)
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'result': f'Ошибка при обновлении рекламы: {e}'}
+        )
+
+
+
 @api_view(['POST'])
 def create_cabinet_user(request):
     try:

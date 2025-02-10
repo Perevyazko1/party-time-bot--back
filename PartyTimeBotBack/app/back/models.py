@@ -43,14 +43,15 @@ class PartyEvent(models.Model):
     class Meta:
         verbose_name = 'Событие'
         verbose_name_plural = 'Событие'
-
+    id_tg_create_user = models.IntegerField('ID telegram',default=0)
     id_party = models.UUIDField('ID события',primary_key=True, default=uuid.uuid4, editable=False)
     about_event = models.CharField('О событии', max_length=500)
     user = models.ManyToManyField('CustomUser', blank=True ,related_name='events')
 
 
-    type_event = models.CharField(max_length=100)
-    img_event = models.ImageField(upload_to='event_images/', blank=True, null=True)
+    type_event = models.CharField('Тип события',max_length=100, blank=True, null=True)
+    address = models.CharField('Адрес события',max_length=100, blank=True, null=True)
+    img_event = models.CharField('Картинка мероприятия', blank=True, null=True)
 
 
 class UserCabinet(models.Model):
@@ -104,11 +105,13 @@ class Advertising(models.Model):
         verbose_name = 'Реклама'
         verbose_name_plural = 'Реклама'
     link_to_site = models.CharField('Ссылка на сайт', max_length=100, blank=True)
+    count_visit_to_link = models.IntegerField('Переход на сайт', default=0)
     link_to_pay = models.CharField('Ссылка на оплату', max_length=500, blank=True)
     header_advertising = models.CharField('Заголовок рекламы', max_length=100)
     text_advertising = models.CharField('Текст рекламы', max_length=500)
     price = models.IntegerField('Стоимость',default=0)
     count_view = models.IntegerField('Кол-во просмотров',default=0)
+    likes = models.IntegerField('Кол-во лайков',default=0)
     dates = ArrayField(
         base_field=models.DateField(),  # Указываем base_field как поле DateField.
         verbose_name='Даты посещения',  # verbose_name добавляем отдельно.
