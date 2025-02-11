@@ -1,12 +1,14 @@
 from django.urls import path
 
-from back.views import create_user, create_event, get_event,create_cabinet_user, add_date, get_advertising, get_advertising_item, delete_event,patch_advertising
+from back.views import (create_user, create_event, get_event,create_cabinet_user, add_date, get_advertising,
+                        get_advertising_item, delete_event,patch_advertising,get_user_events)
 
 urlpatterns = [
     path('create_user/', create_user),
     path('create_event/', create_event),
     path('delete_event/', delete_event),
     path('get_event/', get_event),
+    path('get_user_events/', get_user_events),
     path('create_cabinet_user/', create_cabinet_user),
     path('add_date/', add_date),
     path('get_advertising/', get_advertising),

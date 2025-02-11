@@ -169,7 +169,7 @@ def create_event(request):
         )
 
 @api_view(['GET'])
-def get_events(request):
+def get_user_events(request):
     id_tg_create_user = request.data.get('id_tg_create_user')
     try:
         # Получение cобытий
