@@ -35,6 +35,12 @@ class AdvertisingSerializer(serializers.ModelSerializer):
         model = Advertising
         fields = '__all__'
 
+class EventsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PartyEvent
+        fields = '__all__'
+
 
 
 class UserDateSerializer(serializers.ModelSerializer):

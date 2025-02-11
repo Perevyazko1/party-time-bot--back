@@ -5,7 +5,7 @@ from .models import CustomUser,PartyEvent, UserCabinet, UserDate, Advertising
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PartyEventSerializer, AdvertisingSerializer
+from .serializers import PartyEventSerializer, AdvertisingSerializer,EventsSerializer
 from django.db import IntegrityError
 
 
@@ -168,6 +168,29 @@ def create_event(request):
             data={'result': f'Ошибка обновления данных, перепроверьте данные! {e}'}
         )
 
+@api_view(['GET'])
+def get_events(request):
+    id_tg_create_user = request.data.get('id_tg_create_user')
+    try:
+        # Получение cобытий
+        queryset = PartyEvent.objects.filter(id_tg_create_user=id_tg_create_user)
+
+        if not queryset.exists():
+            return Response(
+                {"error": "Событий не найдено."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Сериализация данных
+        serializer_party_event = EventsSerializer(queryset, many=True)
+        return Response(serializer_party_event.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {"error": f"Произошла ошибка: {e}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 @api_view(['DELETE'])
 def delete_event(request):
