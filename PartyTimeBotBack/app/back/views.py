@@ -435,7 +435,6 @@ def get_advertising_item(request, id):
 @api_view(['GET'])
 def get_advertising(request):
     try:
-        # Получение Рекламы
         queryset = Advertising.objects.all()
         if not queryset.exists():
             return Response(
@@ -443,9 +442,9 @@ def get_advertising(request):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # Сериализация данных
-        serializer_party_event = AdvertisingSerializer(queryset, many=True)
-        return Response(serializer_party_event.data, status=status.HTTP_200_OK)
+        # Передаём request в context, чтобы избежать ошибки с build_absolute_uri
+        serializer = AdvertisingSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Exception as e:
         print(e)
