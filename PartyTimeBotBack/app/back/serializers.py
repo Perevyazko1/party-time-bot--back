@@ -22,10 +22,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 
+
 class AdvertisingPictureSerializer(serializers.ModelSerializer):
+    picture_url = serializers.SerializerMethodField()
+
     class Meta:
         model = AdvertisingPicture
-        fields = '__all__'
+        fields = ['id', 'picture_url']
+
+    def get_picture_url(self, obj):
+        request = self.context.get('request')
+        if obj.picture:
+            return request.build_absolute_uri(obj.picture.url)
+        return None
 
 
 class AdvertisingSerializer(serializers.ModelSerializer):
