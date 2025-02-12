@@ -170,7 +170,7 @@ def create_event(request):
 
 @api_view(['GET'])
 def get_user_events(request):
-    id_tg_create_user = request.data.get('id_tg_create_user')
+    id_tg_create_user = request.query_params.get('id_tg_create_user')
     try:
         # Получение cобытий
         queryset = PartyEvent.objects.filter(id_tg_create_user=id_tg_create_user)
