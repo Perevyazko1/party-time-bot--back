@@ -128,6 +128,12 @@ def update_event(request):
 @api_view(['POST'])
 def create_event(request):
     id_tg_create_user = request.data.get('id_tg_create_user')
+    # Проверяем, передан ли id_tg_create_user
+    if id_tg_create_user is None:
+        return Response(
+            {'result': 'Ошибка: отсутствует id_tg_create_user'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
     try:
         if PartyEvent.objects.filter(id_tg_create_user=id_tg_create_user).count() >= 3:
             return Response(
