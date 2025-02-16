@@ -18,11 +18,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
                   ]
 
 
-
-
-
-
-
 class AdvertisingPictureSerializer(serializers.ModelSerializer):
     picture_url = serializers.SerializerMethodField()
 
@@ -44,13 +39,6 @@ class AdvertisingSerializer(serializers.ModelSerializer):
         model = Advertising
         fields = '__all__'
 
-class EventsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PartyEvent
-        fields = '__all__'
-
-
 
 class UserDateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,9 +55,19 @@ class UserCabinetSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'dates']  # Добавляем поле 'dates' для связи
 
 
+class EventsSerializer(serializers.ModelSerializer):
+    users = UserCabinetSerializer(many=True, read_only=True)  # Вложенные кабинеты пользователей
+
+    class Meta:
+        model = PartyEvent
+        fields = ['id_party', 'about_event', 'type_event', 'img_event', 'users', 'id_tg_create_user', 'address',
+                  'id_tg_create_user']
+
+
 class PartyEventSerializer(serializers.ModelSerializer):
     users = UserCabinetSerializer(many=True, read_only=True)  # Вложенные кабинеты пользователей
 
     class Meta:
         model = PartyEvent
-        fields = ['id_party', 'about_event', 'type_event', 'img_event', 'users', 'id_tg_create_user', 'address','id_tg_create_user']
+        fields = ['id_party', 'about_event', 'type_event', 'img_event', 'users', 'id_tg_create_user', 'address',
+                  'id_tg_create_user']

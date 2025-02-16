@@ -144,7 +144,7 @@ def create_event(request):
         about_event = request.data.get('about_event')
         type_event = request.data.get('type_event')
         img_event = request.data.get('img_event')
-        address = request.data.get('address')
+        address = request.data.get('address_event')
 
 
 
