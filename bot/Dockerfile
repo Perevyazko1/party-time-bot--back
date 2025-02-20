@@ -5,16 +5,21 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-# Копируем файл зависимостей и устанавливаем их
-COPY req.txt ./
+# Устанавливаем зависимости для виртуального окружения
 RUN apk update && apk add python3-dev \
                           gcc \
                           libc-dev \
-                          libffi-dev
+                          libffi-dev \
+                          bash  # bash, если нужно для удобства работы
 
+# Создаем виртуальное окружение и активируем его
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"  # Устанавливаем путь к виртуальному окружению
+
+# Обновляем pip и устанавливаем зависимости в виртуальном окружении
 RUN pip install --upgrade pip
+COPY req.txt ./
 RUN pip install -r req.txt
-
 
 COPY . /app
 

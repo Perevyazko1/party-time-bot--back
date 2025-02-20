@@ -3,8 +3,13 @@ FROM python:3.11-alpine
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /usr/src/app
 
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+
 # Копируем файл зависимостей и устанавливаем их
 COPY req.txt ./
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r req.txt
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r req.txt
