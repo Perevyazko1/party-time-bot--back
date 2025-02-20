@@ -145,6 +145,7 @@ def create_event(request):
         type_event = request.data.get('type_event')
         img_event = request.data.get('img_event')
         address = request.data.get('address_event')
+        notes_event = request.data.get('notes_event')
 
 
 
@@ -155,6 +156,7 @@ def create_event(request):
             type_event=type_event if type_event is not None else "",
             img_event=img_event if img_event  is not None else "",
             address=address if address  is not None else "",
+            notes_event=notes_event if notes_event  is not None else "",
             id_tg_create_user=id_tg_create_user if id_tg_create_user  is not None else 0,
         )
         created = True  # При вызове create объект всегда создается
