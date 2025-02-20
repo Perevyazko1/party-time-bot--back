@@ -50,6 +50,7 @@ class PartyEvent(models.Model):
 
 
     type_event = models.CharField('Тип события',max_length=100, blank=True, null=True)
+    notes_event = models.CharField('Заметки', blank=True, null=True)
     address = models.CharField('Адрес события',max_length=100, blank=True, null=True)
     img_event = models.CharField('Картинка мероприятия', blank=True, null=True)
 
