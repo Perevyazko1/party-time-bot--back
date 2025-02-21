@@ -28,10 +28,23 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '0.0.0.0',
     'localhost',
+
     'https://188.225.47.208',
     '188.225.47.208',
     '188.225.47.208:8003',
     'http://188.225.47.208',
+
+    'https://5.35.84.212',
+    '5.35.84.212',
+    '5.35.84.212:8003',
+    'http://5.35.84.212',
+
+    'party-bot.ru',
+    'http://www.party-bot.ru',
+    'http://party-bot.ru',
+    'https://party-bot.ru',
+    'https://www.party-bot.ru',
+
     'party-time.tw1.ru',
     'http://www.party-time.tw1.ru',
     'http://party-time.tw1.ru',
@@ -50,6 +63,16 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost',
                         'https://party-time.tw1.ru/admin',
                         'https://www.party-time.tw1.ru',
                         'https://www.party-time.tw1.ru/admin',
+                        'https://5.35.84.212',
+                        '5.35.84.212',
+                        '5.35.84.212:8003',
+                        'http://5.35.84.212',
+
+                        'party-bot.ru',
+                        'http://www.party-bot.ru',
+                        'http://party-bot.ru',
+                        'https://party-bot.ru',
+                        'https://www.party-bot.ru',
                         ]
 
 # Application definition
