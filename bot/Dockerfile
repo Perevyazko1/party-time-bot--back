@@ -10,11 +10,11 @@ RUN apk update && apk add python3-dev \
                           gcc \
                           libc-dev \
                           libffi-dev \
-                          bash  # bash, если нужно для удобства работы
+                          bash
 
 # Создаем виртуальное окружение и активируем его
 RUN python3 -m venv /venv
-ENV PATH="/venv/bin:$PATH"  # Устанавливаем путь к виртуальному окружению
+ENV PATH="/venv/bin:$PATH"
 
 # Обновляем pip и устанавливаем зависимости в виртуальном окружении
 RUN pip install --upgrade pip
