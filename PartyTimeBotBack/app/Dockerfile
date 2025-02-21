@@ -15,7 +15,7 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r req.txt
 
 # Копируем исходный код проекта
-COPY .. .
+COPY . .
 
 # Собираем статические файлы
 COPY ./entrypoint.sh /entrypoint.sh
